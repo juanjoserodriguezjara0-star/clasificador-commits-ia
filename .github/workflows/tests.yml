@@ -1,3 +1,4 @@
+
 name: Pruebas de la API
 
 on:
@@ -11,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Descargar el repositorio
+      - name: Descargar repositorio
         uses: actions/checkout@v4
 
       - name: Configurar Python
@@ -26,3 +27,6 @@ jobs:
 
       - name: Comprobar sintaxis
         run: python -m py_compile main.py
+
+      - name: Ejecutar pruebas
+        run: pytest -v
