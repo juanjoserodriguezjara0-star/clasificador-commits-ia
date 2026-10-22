@@ -1,0 +1,38 @@
+services:
+  api:
+    build: .
+    container_name: clasificador-api
+    ports:
+      - "8000:8000"
+    environment:
+      OLLAMA_URL: http://host.docker.internal:11434
+      OLLAMA_MODEL: qwen2.5-coder:1.5b
+      DATABASE_URL: postgresql://clasificador:clasificador@db:5432/clasificador
+    depends_on:
+      db:
+        condition: service_healthy
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped
+
+  db:
+    image: postgres:16-alpine
+    container_name: clasificador-db
+    environment:
+      POSTGRES_DB: clasificador
+      POSTGRES_USER: clasificador
+      POSTGRES_PASSWORD: clasificador
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./db/init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U clasificador -d clasificador"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
