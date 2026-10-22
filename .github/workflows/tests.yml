@@ -1,4 +1,3 @@
-
 name: Pruebas de la API
 
 on:
@@ -26,7 +25,13 @@ jobs:
           pip install -r requirements.txt
 
       - name: Comprobar sintaxis
-        run: python -m py_compile main.py
+        run: python -m py_compile main.py test_main.py
+
+      - name: Validar configuración Docker Compose
+        run: docker compose config --quiet
+
+      - name: Construir imagen de la API
+        run: docker build --tag clasificador-commits-ia:test .
 
       - name: Ejecutar pruebas
         run: pytest -v
