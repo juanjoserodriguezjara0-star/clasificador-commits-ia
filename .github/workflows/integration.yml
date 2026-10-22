@@ -131,13 +131,18 @@ jobs:
       - name: Verificar respaldo y restauración de PostgreSQL
         run: |
           set -euo pipefail
-          export PGPASSWORD=clasificador
-          pg_dump -h localhost -U clasificador -d clasificador -Fc -f /tmp/clasificador.dump
-          createdb -h localhost -U clasificador clasificador_restore_test
-          pg_restore -h localhost -U clasificador -d clasificador_restore_test --clean --if-exists /tmp/clasificador.dump
-          COUNT=$(psql -h localhost -U clasificador -d clasificador_restore_test -tAc "SELECT count(*) FROM inferencias")
-          test "$COUNT" -ge 1
-          echo "Respaldo y restauración aprobados; registros restaurados: $COUNT"
+          mkdir -p "$RUNNER_TEMP/pg-backup"
+          docker run --rm --network host \
+            -e PGPASSWORD=clasificador \
+            -v "$RUNNER_TEMP/pg-backup:/backup" \
+            postgres:16-alpine sh -ec '
+              pg_dump -h localhost -U clasificador -d clasificador -Fc -f /backup/clasificador.dump
+              createdb -h localhost -U clasificador clasificador_restore_test
+              pg_restore -h localhost -U clasificador -d clasificador_restore_test --clean --if-exists /backup/clasificador.dump
+              COUNT=$(psql -h localhost -U clasificador -d clasificador_restore_test -tAc "SELECT count(*) FROM inferencias")
+              test "$COUNT" -ge 1
+              echo "Respaldo y restauración aprobados; registros restaurados: $COUNT"
+            '
 
       - name: Instalar k6
         uses: grafana/setup-k6-action@v1
