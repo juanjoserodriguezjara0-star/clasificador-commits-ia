@@ -77,6 +77,7 @@ Las pruebas simulan Ollama y PostgreSQL cuando corresponde; no necesitan descarg
 
 ## Documentación adicional
 
+- [Actividades y pendientes de la guía SENA](docs/actividades-guia-sena.md)
 - [Manual técnico](docs/manual-tecnico.md)
 - [Informe técnico](docs/informe-tecnico.md)
 
