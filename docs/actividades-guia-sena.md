@@ -86,3 +86,49 @@ No registrar tamaños ni licencias de memoria: deben verificarse en las páginas
 5. Solicitar revisión de un compañero mediante pull request.
 6. Verificar el repositorio desde una copia limpia siguiendo el README.
 7. Publicar el release `v1.0.0`, el despliegue remoto y el video cuando exista evidencia real.
+
+## Diagnóstico individual del equipo
+
+**Fecha de verificación:** 30 de octubre de 2026.
+
+### Características del computador
+
+| Característica | Resultado |
+|---|---|
+| Fabricante | Lenovo |
+| Modelo | 83S6 |
+| Sistema operativo | Windows 11 Home |
+| Versión | 10.0.26300 (compilación 26300) |
+| Arquitectura | 64 bits (x64) |
+| Memoria RAM física | 16 GB |
+| Almacenamiento | SSD KIOXIA de 512 GB |
+| Capacidad total de C: | Aproximadamente 474,5 GB |
+| Espacio libre en C: | Aproximadamente 138,3 GB |
+| Sistema de archivos | NTFS |
+| Virtualización | Habilitada |
+| WSL2 | Ubuntu 24.04 instalado |
+
+### Verificación de requisitos mínimos
+
+| Requisito de la guía | Mínimo solicitado | Resultado | Estado |
+|---|---:|---:|---|
+| Memoria RAM | 4 GB | 16 GB | Cumple |
+| Espacio libre | 15 GB | 138,3 GB | Cumple |
+| Virtualización | Habilitada | Habilitada | Cumple |
+| Windows | Versión 2004 o superior | Windows 11 | Cumple |
+
+### Evidencias de verificación
+
+Se utilizaron comandos de PowerShell para consultar las características reales del equipo:
+
+- `Get-CimInstance Win32_ComputerSystem`: consulta de memoria RAM física.
+- `Get-CimInstance Win32_OperatingSystem`: consulta del sistema operativo y su versión.
+- `Get-Volume -DriveLetter C`: consulta de capacidad y espacio libre.
+- `systeminfo`: comprobación del estado del hipervisor y la virtualización.
+- `Get-PhysicalDisk`: identificación del tipo de almacenamiento.
+
+También se ejecutó `free -h` en Ubuntu para comprobar la memoria asignada al entorno WSL2.
+
+### Conclusión
+
+El computador cumple los requisitos mínimos establecidos por la guía para trabajar en el entorno local. Dispone de memoria RAM suficiente, almacenamiento SSD, espacio libre superior al mínimo requerido y virtualización habilitada. Además, cuenta con Ubuntu 24.04 funcionando mediante WSL2.
