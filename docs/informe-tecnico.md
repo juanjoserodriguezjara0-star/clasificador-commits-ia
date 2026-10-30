@@ -92,3 +92,49 @@ La restauración finalizó sin errores. Posteriormente, se consultó la tabla `i
 | 1 | fix: corregir error al iniciar sesión | fix |
 
 **Resultado:** respaldo generado y restauración verificada correctamente. La base de datos original no fue modificada durante esta prueba.
+
+## 9. Caracterización del modelo local
+
+### 9.1 Perfil del equipo y modelo
+
+- Perfil de hardware: A.
+- Memoria asignada a WSL2: 7,8 GiB.
+- Memoria física del equipo: 16 GB.
+- Sistema operativo: Ubuntu 24.04.5 LTS mediante WSL2.
+- Modelo utilizado: `qwen2.5-coder:1.5b`.
+- Tamaño del modelo: 986 MB.
+
+### 9.2 Medición de latencia
+
+Se realizaron cinco ejecuciones de generación de texto con el modelo local.
+
+| Ejecución | Tiempo real |
+|---|---:|
+| 1 | 7,042 s |
+| 2 | 0,351 s |
+| 3 | 0,309 s |
+| 4 | 0,276 s |
+| 5 | 0,256 s |
+| **Promedio** | **1,647 s** |
+
+La primera ejecución presentó una latencia mayor debido a la carga inicial del modelo. Las siguientes ejecuciones fueron más rápidas porque el modelo ya estaba cargado.
+
+### 9.3 Uso de memoria durante la inferencia
+
+Durante una generación de respuesta se ejecutó `free -h` y se obtuvieron los siguientes resultados:
+
+| Métrica | Resultado |
+|---|---:|
+| Memoria total asignada a WSL2 | 7,8 GiB |
+| Memoria utilizada | 1,7 GiB |
+| Memoria libre | 3,9 GiB |
+| Memoria disponible | 6,1 GiB |
+| Swap utilizada | 0 B |
+
+Estos valores corresponden a la memoria observada dentro de WSL2 durante la inferencia.
+
+### 9.4 Calidad percibida
+
+**Calificación: 4/5.**
+
+El modelo respondió correctamente a la prueba de clasificación del mensaje `fix: corregir error al iniciar sesión`, identificándolo como `fix`. También generó una explicación coherente sobre Python. Se asigna una valoración de 4 sobre 5 por el buen resultado observado en estas pruebas, teniendo en cuenta que todavía no se ha realizado una evaluación amplia con un conjunto de mensajes etiquetados.
