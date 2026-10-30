@@ -12,6 +12,7 @@ Implementar una API que clasifique mensajes de commit con un modelo local de len
 - PostgreSQL para persistencia
 - Docker y Docker Compose para ejecución
 - pytest y GitHub Actions para pruebas automatizadas
+- k6 para pruebas básicas de carga
 
 ## 3. Diseño
 
@@ -30,9 +31,32 @@ El cliente envía un mensaje a `POST /clasificar`. FastAPI valida la entrada, en
 
 ## 5. Validación y pruebas
 
-Las pruebas automatizadas sustituyen la llamada a Ollama por respuestas controladas para no depender de la red ni del tiempo de inferencia. También comprueban la validación de entradas y el tratamiento de errores. La integración real debe ejecutarse con Ollama y PostgreSQL activos.
+### 5.1 Pruebas automatizadas
 
-No se presentan métricas de precisión ni tiempos de respuesta como resultados medidos hasta ejecutar un conjunto de evaluación definido.
+Se ejecutó `pytest -v` y se obtuvieron 10 pruebas aprobadas. Las pruebas comprueban el comportamiento de la API, la validación de entradas y el tratamiento de errores. Las llamadas al modelo se sustituyen por respuestas controladas para evitar depender de la red y del tiempo de inferencia.
+
+### 5.2 Prueba de integración real
+
+Se verificó la API con Ollama y PostgreSQL activos. El endpoint `GET /health` informó que los servicios de API, Ollama y PostgreSQL estaban disponibles.
+
+Se envió a `POST /clasificar` el mensaje `fix: corregir error al iniciar sesión`. La API devolvió la categoría `fix` y un identificador de registro. Después, `GET /inferencias` permitió consultar el registro almacenado.
+
+### 5.3 Prueba de carga con k6
+
+Se ejecutó `k6 run tests/load.js` contra la ruta principal de la API, con un usuario virtual y cinco iteraciones.
+
+| Métrica | Resultado | Criterio configurado | Estado |
+|---|---:|---:|---|
+| Solicitudes HTTP | 5 | 5 iteraciones | Completado |
+| Comprobaciones correctas | 10 de 10 | Todas correctas | Aprobado |
+| Solicitudes fallidas | 0 % | Menos del 1 % | Aprobado |
+| Duración p95 | 7,35 ms | Menos de 2.000 ms | Aprobado |
+| Estado HTTP | 200 | HTTP 200 | Aprobado |
+| Campo `version` | Presente | Debe existir | Aprobado |
+
+Estos resultados corresponden a una prueba pequeña de `GET /`. No representan una medición de concurrencia elevada ni del tiempo de inferencia del modelo durante la clasificación.
+
+No se presentan métricas de precisión, exhaustividad o F1 porque todavía no se ha ejecutado una evaluación con un conjunto de mensajes etiquetados.
 
 ## 6. Riesgos y limitaciones
 
@@ -40,9 +64,11 @@ No se presentan métricas de precisión ni tiempos de respuesta como resultados 
 - La disponibilidad depende de Ollama y PostgreSQL.
 - Las credenciales de ejemplo de Docker Compose son solo para desarrollo.
 - Las pruebas unitarias no sustituyen una prueba de integración con los servicios reales.
+- La prueba de carga realizada es básica y no permite concluir cómo se comporta el sistema con muchos usuarios simultáneos.
 
 ## 7. Mejoras futuras
 
 - Crear un conjunto etiquetado de mensajes y medir precisión, exhaustividad y F1 por categoría.
+- Ampliar las pruebas de carga con más usuarios virtuales y solicitudes.
 - Añadir autenticación, límites de solicitudes y observabilidad.
 - Gestionar credenciales mediante secretos y definir políticas de retención.
