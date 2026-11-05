@@ -138,3 +138,36 @@ Estos valores corresponden a la memoria observada dentro de WSL2 durante la infe
 **Calificación: 4/5.**
 
 El modelo respondió correctamente a la prueba de clasificación del mensaje `fix: corregir error al iniciar sesión`, identificándolo como `fix`. También generó una explicación coherente sobre Python. Se asigna una valoración de 4 sobre 5 por el buen resultado observado en estas pruebas, teniendo en cuenta que todavía no se ha realizado una evaluación amplia con un conjunto de mensajes etiquetados.
+
+
+## 10. Seguridad y permisos de PostgreSQL
+
+### 10.1 Creación del usuario de aplicación
+
+Se creó el rol `app_ia` en PostgreSQL para separar las operaciones de la aplicación de las funciones administrativas.
+
+### 10.2 Privilegios asignados
+
+Se concedieron los siguientes permisos:
+
+| Recurso | Permiso |
+|---|---|
+| Base de datos `clasificador` | CONNECT |
+| Esquema `public` | USAGE |
+| Tabla `inferencias` | SELECT |
+| Tabla `inferencias` | INSERT |
+| Secuencia `inferencias_id_seq` | USAGE, SELECT |
+
+El usuario `app_ia` no recibió permisos de UPDATE ni DELETE sobre la tabla.
+
+### 10.3 Pruebas de seguridad
+
+Se realizaron las siguientes verificaciones:
+
+- Consulta de registros mediante `app_ia`: exitosa.
+- Consulta de privilegios en `information_schema.role_table_grants`: confirmó SELECT e INSERT.
+- Intento de eliminación de un registro: rechazado por PostgreSQL con el error `permission denied for table inferencias`.
+
+**Resultado:** se verificó que el usuario de aplicación puede consultar e insertar registros, pero no eliminarlos.
+
+La API todavía utiliza el usuario `clasificador` mediante `DATABASE_URL`. La migración de la conexión de la API al nuevo usuario `app_ia` queda pendiente.
