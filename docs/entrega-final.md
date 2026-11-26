@@ -24,10 +24,10 @@ Una ejecución exitosa confirma únicamente los pasos que muestra ese flujo (ins
 
 ## Resultados que no deben darse por ejecutados sin evidencia
 Los siguientes puntos requieren ejecución real y registro de sus resultados:
-- Arranque conjunto de API, Ollama y PostgreSQL.
-- Clasificación con el modelo instalado y persistencia de registros reales.
-- Ejecución del script k6 y conservación de sus métricas.
-- Creación de un respaldo y restauración comprobada en una base temporal.
+- Arranque conjunto de API, Ollama y PostgreSQL: comprobado el 25 de noviembre de 2026; `/health` informó los tres servicios disponibles.
+- Clasificación real con Ollama y persistencia en PostgreSQL: comprobada; se clasificó un mensaje y se consultó el registro mediante `/inferencias`.
+- Prueba k6: ejecutada con 1 usuario virtual y 5 iteraciones sobre `GET /`; 5 solicitudes, 0 fallidas, 10 comprobaciones aprobadas y p95 de 6,33 ms. Es una prueba de humo, no una prueba de carga alta ni de inferencia.
+- Respaldo y restauración: comprobados con `pg_dump` y `pg_restore` en una base temporal; se verificaron 3 registros restaurados. El archivo local no se publica en GitHub.
 - Revisión del repositorio por un compañero y evidencia de dicha revisión.
 - Publicación de la versión `v1.0.0` después de completar las validaciones.
 
@@ -37,9 +37,9 @@ Los siguientes puntos requieren ejecución real y registro de sus resultados:
 - [x] Pruebas automatizadas y flujo de GitHub Actions.
 - [x] Manual técnico e informe técnico inicial.
 - [x] Plan de validación y procedimiento de respaldo.
-- [ ] Evidencia de integración real de los tres servicios.
-- [ ] Resultados medidos de la prueba de carga.
-- [ ] Evidencia de respaldo y restauración.
+- [x] Integración real de API, Ollama y PostgreSQL comprobada en el equipo local.
+- [x] Prueba de humo k6 ejecutada: 5 solicitudes, 0 fallidas, 10/10 checks y p95 de 6,33 ms (no equivale a carga alta).
+- [x] Respaldo y restauración en base temporal comprobados; 3 registros recuperados.
 - [ ] Revisión auténtica por un compañero, si la guía la exige.
 - [ ] Release `v1.0.0` tras completar las validaciones.
 - [ ] Entregas en Google Classroom: reflexión, cuestionario, diagnóstico del equipo y publicaciones solicitadas.
