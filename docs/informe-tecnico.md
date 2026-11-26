@@ -50,7 +50,7 @@ Se ejecutó `k6 run tests/load.js` contra la ruta principal de la API, con un us
 | Solicitudes HTTP | 5 | 5 iteraciones | Completado |
 | Comprobaciones correctas | 10 de 10 | Todas correctas | Aprobado |
 | Solicitudes fallidas | 0 % | Menos del 1 % | Aprobado |
-| Duración p95 | 7,35 ms | Menos de 2.000 ms | Aprobado |
+| Duración p95 | 6,33 ms | Menos de 2.000 ms | Aprobado |
 | Estado HTTP | 200 | HTTP 200 | Aprobado |
 | Campo `version` | Presente | Debe existir | Aprobado |
 
@@ -75,23 +75,24 @@ No se presentan métricas de precisión, exhaustividad o F1 porque todavía no s
 
 ## 8. Respaldo y restauración de PostgreSQL
 
-Se realizó un respaldo de la base de datos `clasificador` utilizando la herramienta `pg_dump` de PostgreSQL.
+Se realizó un respaldo de la base de datos `clasificador` utilizando `pg_dump` en formato custom.
 
-- Archivo generado: `respaldo-clasificador.sql`.
-- Tamaño del archivo: aproximadamente 2,8 KB.
+- Archivo generado localmente: `backups/clasificador.dump`.
+- Tamaño observado: aproximadamente 5,0 KB.
 - Base de datos de origen: `clasificador`.
+- El archivo de respaldo se mantiene fuera del repositorio porque puede contener datos de inferencias.
 
 ### 8.1 Prueba de restauración
 
-Se creó una base de datos temporal llamada `clasificador_prueba` y se restauró el respaldo mediante `psql`.
+Se creó una base de datos temporal llamada `clasificador_restore_test` y se restauró el respaldo mediante `pg_restore`.
 
-La restauración finalizó sin errores. Posteriormente, se consultó la tabla `inferencias` y se confirmó la recuperación de un registro:
+La restauración finalizó sin errores. Posteriormente, se consultó la tabla `inferencias` y se confirmó la recuperación de tres registros:
 
 | ID | Mensaje | Categoría |
 |---|---|---|
-| 1 | fix: corregir error al iniciar sesión | fix |
+| 1, 3 y 4 | Tres registros de inferencias | Recuperados |
 
-**Resultado:** respaldo generado y restauración verificada correctamente. La base de datos original no fue modificada durante esta prueba.
+**Resultado:** respaldo generado y restauración verificada correctamente con tres registros. La base de datos original no fue modificada durante esta prueba.
 
 ## 9. Caracterización del modelo local
 
