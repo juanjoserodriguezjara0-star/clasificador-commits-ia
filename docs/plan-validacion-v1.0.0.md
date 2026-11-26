@@ -13,18 +13,18 @@ Este documento distingue las comprobaciones automáticas realizadas de las que r
 
 Consulta el estado de la ejecución más reciente en la pestaña Actions del repositorio.
 
-## Pruebas de integración pendientes en un equipo con Ollama
+## Pruebas de integración realizadas en el equipo local
 
-- [ ] Confirmar que Ollama responde y que el modelo `qwen2.5-coder:1.5b` está instalado.
-- [ ] Levantar PostgreSQL y verificar que se crea la tabla `inferencias`.
-- [ ] Levantar la API y confirmar `GET /health`.
-- [ ] Enviar mensajes representativos a `POST /clasificar` y comprobar las seis categorías.
-- [ ] Confirmar que cada clasificación se guarda en PostgreSQL.
-- [ ] Consultar los resultados con `GET /inferencias`.
-- [ ] Probar el arranque completo mediante Docker Compose.
-- [ ] Ejecutar `tests/load.js` con k6 y guardar resultados medidos.
-- [ ] Crear un respaldo y probar su restauración en una base temporal.
-- [ ] Registrar incidencias y resultados reales antes de declarar finalizada la integración.
+- [x] Ollama respondió y el modelo `qwen2.5-coder:1.5b` estuvo disponible.
+- [x] PostgreSQL inició correctamente y la tabla `inferencias` estuvo disponible.
+- [x] La API respondió en `GET /health` con API, Ollama y PostgreSQL en estado `ok`.
+- [x] Se envió un mensaje a `POST /clasificar`; el modelo devolvió una categoría válida.
+- [x] La clasificación quedó guardada y fue consultable mediante `GET /inferencias`.
+- [x] Los servicios se ejecutaron mediante Docker Compose.
+- [x] `tests/load.js` se ejecutó con k6: 1 usuario virtual, 5 iteraciones, 5 solicitudes sin fallos, 10/10 comprobaciones y p95 de 6,33 ms. Esta es una prueba de humo, no una prueba de carga alta.
+- [x] Se creó un respaldo y se restauró en `clasificador_restore_test`; se verificaron 3 registros.
+
+Las pruebas anteriores se realizaron localmente el 25 de noviembre de 2026. El archivo de respaldo permanece local y no se incluye en el repositorio.
 
 ## Revisión de entrega
 
