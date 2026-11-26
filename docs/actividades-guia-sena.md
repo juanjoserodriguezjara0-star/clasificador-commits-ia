@@ -69,23 +69,23 @@ No registrar tamaños ni licencias de memoria: deben verificarse en las páginas
 | Pruebas automatizadas y GitHub Actions | Ejecución reciente aprobada |
 | Dockerfile y Docker Compose | La CI valida la configuración y construye la imagen |
 | Ollama y modelo local | Se reportó una respuesta correcta desde el equipo local |
-| Integración real API + Ollama + PostgreSQL | Pendiente de ejecutar y documentar en el equipo |
+| Integración real API + Ollama + PostgreSQL | Comprobada localmente el 25 de noviembre de 2026; resultado documentado en `docs/entrega-final.md` e `docs/informe-tecnico.md` |
 | WSL2/Ubuntu y Docker instalados en el equipo | Pendiente de comprobar |
 | Pull request revisado por un compañero | Pendiente; requiere revisión auténtica |
-| Pruebas de carga con k6 y reporte de latencia | Pendiente de evidencia |
-| Respaldo y restauración probados | Pendiente de evidencia |
+| Prueba de humo k6 y reporte de latencia | Ejecutada localmente: 1 usuario virtual, 5 iteraciones, 0 fallos, 10/10 checks y p95 de 6,33 ms; no equivale a carga alta |
+| Respaldo y restauración probados | Verificados localmente con `pg_dump`/`pg_restore` en base temporal; 3 registros recuperados |
 | Release de GitHub `v1.0.0` | No publicar hasta validar la integración |
 | Despliegue remoto y video de demostración | Pendiente de evidencia |
 
 ## 7. Orden recomendado para cerrar la entrega
 
-1. Completar en Classroom la reflexión, el cuestionario y el formulario de caracterización del equipo.
-2. Confirmar WSL2/Ubuntu, Docker Compose y el modelo de Ollama en el equipo.
-3. Ejecutar el sistema completo y guardar resultados de `/health`, `/clasificar` y `/inferencias`.
-4. Hacer pruebas de conectividad, seguridad y carga, y documentar resultados reales.
-5. Solicitar revisión de un compañero mediante pull request.
+1. Completar en Classroom la reflexión, el cuestionario y el formulario de caracterización del equipo; estas actividades no se completan desde el repositorio.
+2. Publicar el mapa mental colaborativo en el tablón y comentar la publicación de un compañero.
+3. Confirmar que la investigación de tres modelos Ollama menores de 2B incluya nombre, etiqueta, tamaño, licencia y tarea, con datos de sus páginas oficiales.
+4. Conservar las evidencias locales de `/health`, `/clasificar`, `/inferencias`, k6 y respaldo/restauración. Los resultados del 25 de noviembre están descritos en `docs/entrega-final.md` e `docs/informe-tecnico.md`.
+5. Solicitar revisión auténtica de un compañero mediante pull request, si la guía lo exige; el PR de actualización documental no sustituye una revisión de compañero.
 6. Verificar el repositorio desde una copia limpia siguiendo el README.
-7. Publicar el release `v1.0.0`, el despliegue remoto y el video cuando exista evidencia real.
+7. Publicar el release `v1.0.0`, el despliegue remoto y el video solo cuando existan las evidencias correspondientes.
 
 ## Diagnóstico individual del equipo
 
